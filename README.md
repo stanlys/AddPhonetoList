@@ -2,6 +2,6 @@
 
 ---
 
-Использовал (**Vite**)[https://vitejs.dev/]
+Использовал [**Vite**](https://vitejs.dev/)
 
 Запуск `npm run dev`
