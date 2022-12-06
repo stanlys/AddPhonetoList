@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useRef, useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
 import './App.css';
 import {
   AvailablePhones,
@@ -8,7 +8,7 @@ import {
   voidSetPhone,
 } from './interface';
 
-function App() {
+const App = () => {
   const [phoneList, setPhoneList] = useState<AvailablePhones[]>([]);
   const [selectedPhone, setSelectedPhone] = useState<string>('');
   const [belPhone, setBelPhone] = useState<string>('');
@@ -33,7 +33,7 @@ function App() {
   return (
     <>
       <div className="App">
-        <fieldset style={{ display: 'flex', flexDirection: 'column', gap: '2rem', border: 0 }}>
+        <fieldset className="formArea">
           <div>
             <label htmlFor="belphone">Белорусский номер</label>
             <input
@@ -59,7 +59,6 @@ function App() {
           <legend>Введенные номера телефонов: </legend>
           <select
             size={10}
-            style={{ width: '30rem' }}
             onChange={(e) => setSelectedPhone(e.target.value)}
           >
             {phoneList.map(({ phone, isCorrect }, index) => (
@@ -79,12 +78,6 @@ function App() {
       </div>
     </>
   );
-}
+};
 
 export default App;
-
-/*
-
-
-
-*/

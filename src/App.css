@@ -24,3 +24,14 @@ input {
 .selectedPhone > span {
   font-size: large;
 }
+
+.formArea {
+  display: 'flex';
+  flex-direction: 'column';
+  gap: '2rem';
+  border: 0;
+}
+
+select {
+  width: 30rem;
+}
