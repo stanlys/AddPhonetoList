@@ -1,82 +1,90 @@
-import { ChangeEvent, KeyboardEvent, useState } from 'react';
+import React, { KeyboardEvent, useRef, useState } from 'react';
 import './App.css';
-
-interface AvailablePhones {
-  phone: string;
-  isCorrect: boolean;
-}
-
-const BEL_PHONE_TEMPLATE = /80\d{9}/;
-const RUS_PHONE_TEMPLATE = /89\d{9}/;
+import {
+  AvailablePhones,
+  BEL_PHONE_TEMPLATE,
+  kindPhoneNumber,
+  RUS_PHONE_TEMPLATE,
+  voidSetPhone,
+} from './interface';
 
 function App() {
   const [phoneList, setPhoneList] = useState<AvailablePhones[]>([]);
+  const [selectedPhone, setSelectedPhone] = useState<string>('');
   const [belPhone, setBelPhone] = useState<string>('');
   const [rusPhone, setRusPhone] = useState<string>('');
 
-  const BelPhone = (e: KeyboardEvent<HTMLInputElement>) => {
+  const inputPhone = (
+    e: KeyboardEvent<HTMLInputElement>,
+    state: string,
+    reg: RegExp,
+    setPhone: voidSetPhone
+  ) => {
     if (e.code === 'Enter' || e.code === 'NumpadEnter') {
       const addedPhone: AvailablePhones = {
-        phone: belPhone,
-        isCorrect: BEL_PHONE_TEMPLATE.test(belPhone),
+        phone: state,
+        isCorrect: reg.test(state),
       };
       setPhoneList((state) => [...state, addedPhone]);
-    }
-  };
-
-  const inputRusPhone = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.code === 'Enter' || e.code === 'NumpadEnter') {
-      const addedPhone: AvailablePhones = {
-        phone: rusPhone,
-        isCorrect: RUS_PHONE_TEMPLATE.test(rusPhone),
-      };
-      setPhoneList((state) => [...state, addedPhone]);
-      setRusPhone('');
+      setPhone('');
     }
   };
 
   return (
-    <div className="App">
-      <fieldset style={{ display: 'flex', flexDirection: 'column', gap: '2rem', border: 0 }}>
-        <div>
-          <label htmlFor="belphone">Белорусский номер</label>
-          <input
-            value={belPhone}
-            id="belphone"
-            onChange={(e) => setBelPhone(e.target.value)}
-            onKeyDown={BelPhone}
-          />
-          <button onClick={() => setBelPhone('')}>clear</button>
-        </div>
-        <div>
-          <label>Российский номер</label>
-          <input
-            value={rusPhone}
-            onChange={(e) => setRusPhone(e.target.value)}
-            onKeyDown={inputRusPhone}
-          ></input>
-          <button>clear</button>
-        </div>
-      </fieldset>
-      <fieldset style={{ border: 0 }}>
-        <legend>Введенные номера телефонов: </legend>
-        <select
-          size={10}
-          style={{ width: '30rem' }}
-          onChange={(e: ChangeEvent<HTMLSelectElement>) => console.log(e.target.value)}
-        >
-          {phoneList.map(({ phone, isCorrect }, index) => (
-            <option disabled={!isCorrect} key={phone + index} value={phone}>
-              {phone}
-            </option>
-          ))}
-        </select>
-      </fieldset>
-      <div>
-        <span className=""></span>
+    <>
+      <div className="App">
+        <fieldset style={{ display: 'flex', flexDirection: 'column', gap: '2rem', border: 0 }}>
+          <div>
+            <label htmlFor="belphone">Белорусский номер</label>
+            <input
+              value={belPhone}
+              onChange={(e) => setBelPhone(e.target.value)}
+              id="belphone"
+              onKeyDown={(e) => inputPhone(e, belPhone, BEL_PHONE_TEMPLATE, setBelPhone)}
+            />
+            <button onClick={() => setBelPhone('')}>clear</button>
+          </div>
+          <div>
+            <label htmlFor="rusphone">Российский номер</label>
+            <input
+              value={rusPhone}
+              id="rusphone"
+              onChange={(e) => setRusPhone(e.target.value)}
+              onKeyDown={(e) => inputPhone(e, rusPhone, RUS_PHONE_TEMPLATE, setRusPhone)}
+            ></input>
+            <button>clear</button>
+          </div>
+        </fieldset>
+        <fieldset style={{ border: 0 }}>
+          <legend>Введенные номера телефонов: </legend>
+          <select
+            size={10}
+            style={{ width: '30rem' }}
+            onChange={(e) => setSelectedPhone(e.target.value)}
+          >
+            {phoneList.map(({ phone, isCorrect }, index) => (
+              <option disabled={!isCorrect} key={phone + index} value={phone}>
+                {phone}
+              </option>
+            ))}
+          </select>
+        </fieldset>
       </div>
-    </div>
+      <div className="selectedPhone">
+        {selectedPhone && (
+          <span>
+            {selectedPhone} - {kindPhoneNumber(selectedPhone)}
+          </span>
+        )}
+      </div>
+    </>
   );
 }
 
 export default App;
+
+/*
+
+
+
+*/
