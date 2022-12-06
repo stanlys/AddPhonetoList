@@ -10,8 +10,8 @@ export const INIT_VALUE: AvailablePhones = {
   isCorrect: false,
 };
 
-export const BEL_PHONE_TEMPLATE = /80\d{9}/;
-export const RUS_PHONE_TEMPLATE = /89\d{9}/;
+export const BEL_PHONE_TEMPLATE = /8025\d{7}/;
+export const RUS_PHONE_TEMPLATE = /8950\d{7}/;
 
 export type voidSetPhone = (value: string) => void;
 

@@ -1,17 +1,19 @@
 #root {
   margin: 0 auto;
   padding: 2rem;
+  width: 60vw;
 }
 
 .read-the-docs {
   color: #888;
 }
 
-.App {
+/* .App {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-}
+  width: 100%;
+} */
 
 input {
   margin: 5px;
@@ -33,5 +35,5 @@ input {
 }
 
 select {
-  width: 30rem;
+  width: 100%;
 }
