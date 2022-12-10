@@ -19,6 +19,10 @@ input {
   margin: 5px;
 }
 
+.header {
+  color: 'whitesmoke';
+}
+
 .selectedPhone {
   margin-top: 2rem;
 }

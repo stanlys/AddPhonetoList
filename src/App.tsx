@@ -1,61 +1,38 @@
-import { KeyboardEvent, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
-import { AvailablePhones, BEL_PHONE_TEMPLATE, kindPhoneNumber, RUS_PHONE_TEMPLATE, voidSetPhone } from './interface';
-import { Layout, Col, Row, Button, Input, Space, Typography } from 'antd';
-import { ClearOutlined, PhoneOutlined } from '@ant-design/icons';
+import { AvailablePhones, BEL_PHONE_TEMPLATE, kindPhoneNumber, RUS_PHONE_TEMPLATE } from './interface';
+import { Layout, Col, Row, Space, Typography } from 'antd';
+import PhoneInput from './component/PhoneInput';
 
 const { Header, Content, Footer } = Layout;
 
 const App = () => {
   const [phoneList, setPhoneList] = useState<AvailablePhones[]>([]);
   const [selectedPhone, setSelectedPhone] = useState<string>('');
-  const [belPhone, setBelPhone] = useState<string>('');
-  const [rusPhone, setRusPhone] = useState<string>('');
 
-  const inputPhone = (e: KeyboardEvent<HTMLInputElement>, state: string, reg: RegExp, setPhone: voidSetPhone) => {
-    if (e.code === 'Enter' || e.code === 'NumpadEnter') {
-      const addedPhone: AvailablePhones = {
-        phone: state,
-        isCorrect: reg.test(state),
-      };
-      setPhoneList((state) => [...state, addedPhone]);
-      setPhone('');
-    }
+  const putPhone = (state: string) => {
+    const isCorrect = BEL_PHONE_TEMPLATE.test(state) || RUS_PHONE_TEMPLATE.test(state);
+
+    const addedPhone: AvailablePhones = {
+      phone: state,
+      isCorrect,
+    };
+    setPhoneList((state) => [...state, addedPhone]);
   };
 
   return (
     <Layout>
-      <Header style={{ color: 'whitesmoke' }}>PhoneList</Header>
+      <Header className="header">PhoneList</Header>
       <Content>
         <div className="App">
           <Row>
             <Col span={8} offset={1}>
               <fieldset className="formArea">
                 <Row>
-                  <label htmlFor="belphone">Белорусский номер</label>
-                  <Input
-                    addonBefore={<PhoneOutlined />}
-                    id="belphone"
-                    placeholder="8025*******"
-                    style={{ width: '80%' }}
-                    value={belPhone}
-                    onChange={(e) => setBelPhone(e.target.value)}
-                    onKeyDown={(e) => inputPhone(e, belPhone, BEL_PHONE_TEMPLATE, setBelPhone)}
-                  />
-                  <Button type="dashed" shape="circle" icon={<ClearOutlined />} onClick={() => setBelPhone('')} />
+                  <PhoneInput placeholder="8025*******" labelCaption="Введите номер телефона" putValue={putPhone} />
                 </Row>
                 <Row>
-                  <label htmlFor="rusphone">Российский номер</label>
-                  <Input
-                    addonBefore={<PhoneOutlined />}
-                    id="rusphone"
-                    placeholder="8950*******"
-                    style={{ width: '80%' }}
-                    value={rusPhone}
-                    onChange={(e) => setRusPhone(e.target.value)}
-                    onKeyDown={(e) => inputPhone(e, rusPhone, RUS_PHONE_TEMPLATE, setRusPhone)}
-                  />
-                  <Button type="dashed" shape="circle" icon={<ClearOutlined />} onClick={() => setRusPhone('')} />
+                  <PhoneInput placeholder="8950*******" labelCaption="Введите номер телефона" putValue={putPhone} />
                 </Row>
               </fieldset>
             </Col>
@@ -77,7 +54,7 @@ const App = () => {
           <Typography>Выбран:</Typography>
           {selectedPhone && (
             <Typography>
-              {selectedPhone} - {kindPhoneNumber(selectedPhone)}
+              {selectedPhone} -{kindPhoneNumber(selectedPhone)}
             </Typography>
           )}
         </Space>
